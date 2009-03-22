@@ -3,15 +3,17 @@ import java.io.File;
 import org.apache.commons.cli.*;
 
 /**
- * VerifyArguments_CLI
+ * CLI
  * <p>
  * 
- * Verify command line arguments, displays help content on error
+ * Parse and verify command line arguments, displays help content on error
  * 
  * @author Sebastien Roux
+ * @mail roux.sebastien@gmail.com
  */
-public class VerifyArguments_CLI {
+public class CLI {
 
+    public static boolean runGUI;
     private String[] arguments;
 
     public String[] getArgs() {
@@ -25,6 +27,7 @@ public class VerifyArguments_CLI {
     /**
      * Define and parse command line arguments Jakarta CLI library
      */
+    @SuppressWarnings("static-access")
     public void parseArgs() {
 
         // Define options
@@ -57,21 +60,24 @@ public class VerifyArguments_CLI {
         @SuppressWarnings("static-access")
         Option separator = OptionBuilder.withArgName("separator").withLongOpt(
                 "separator").hasOptionalArg().withDescription(
-                "use specified separator for ouput").create("s");
+                "use specified separator for output").create("s");
         options.addOption(separator);
 
-        // add help option
-        options.addOption("help", false, "display this help");
-
-        // add tailer option
-        options.addOption("t", "tailer", false, "tail specified log file");
+        // add filter option - require an argument
+        @SuppressWarnings("static-access")
+        Option filter = OptionBuilder.withArgName("filter").withLongOpt(
+                "filter").hasOptionalArg().withDescription(
+                "use specified filter").create("f");
+        options.addOption(filter);
 
         // add categories option
         options.addOption("c", "categories", false,
                 "display message categories");
 
-        // Parse commande line arguments
+        // add help option
+        options.addOption("help", false, "display this help");
 
+        // Parse commande line arguments
         CommandLine cmd;
 
         try {
@@ -88,10 +94,9 @@ public class VerifyArguments_CLI {
 
                 File[] fInputFile = new File[cmd.getOptionValues("i").length];
 
-                // for each specified file check if it exist and if it is a file
-                // (could be a directory...)
+                // for each specified file check if it exists and if it is a file
                 for (int counter = 0; counter < cmd.getOptionValues("i").length; counter++) {
-                    if (new File(strInputFile[counter]).exists() == false || !new File(strInputFile[counter]).isFile()) {
+                    if (!new File(strInputFile[counter]).exists() || !new File(strInputFile[counter]).isFile()) {
                         System.out.println(strInputFile[counter].toString() + " : specified file is not a file or does not exist!\n");
                         displayHelp(options);
                     } else {
@@ -100,7 +105,7 @@ public class VerifyArguments_CLI {
                 }
                 reconstruct.setInputFile(fInputFile);
             } else if (getArgs().length == 0) {
-                displayHelp(options);
+                runGUI = true;
             } else {
                 displayHelp(options);
             }
@@ -109,16 +114,17 @@ public class VerifyArguments_CLI {
             if (cmd.hasOption("o")) {
                 String OutputFile = cmd.getOptionValue("o");
                 reconstruct.setOutputFile(OutputFile);
-            }
+            } 
 
             // categories
             if (cmd.hasOption("c")) {
                 reconstruct.setCategories(true);
             }
 
-            // categories
-            if (cmd.hasOption("t")) {
-                reconstruct.setTailer(true);
+            // filter
+            if (cmd.hasOption("f")) {
+                String filterArg = cmd.getOptionValue("f");
+                reconstruct.setFilter(filterArg);
             }
 
             // date format
@@ -136,19 +142,25 @@ public class VerifyArguments_CLI {
                 reconstruct.setHeader(true);
             }
 
-            // help
-            if (cmd.hasOption("help")) {
-                displayHelp(options);
-            }
-
             // separator/delimiter
             if (cmd.hasOption("s")) {
                 String separatorArg = cmd.getOptionValue("s");
                 reconstruct.setOutputDelimiter(separatorArg);
             }
 
-            reconstruct.go();
-        } // if arguments missing for specified options (-i, -o, -d, -s ...)
+            // help
+            if (cmd.hasOption("help")) {
+                displayHelp(options);
+            }
+
+            if (runGUI == true) {
+                GUI gui = new GUI();
+                gui.go();
+            } else {
+                reconstruct.go();
+            }
+            
+        } // if arguments missing for specified options (-i, -o, -d, -s, -f ...)
         catch (ParseException e) {
             displayHelp(options);
         }
@@ -159,20 +171,40 @@ public class VerifyArguments_CLI {
      */
     private final void displayHelp(Options options) {
 
-        final String HELP_DESC = "DESCRIPTION:\n" + "Parse ANY Essbase (v.5-v.11) server or application logs\n" + "and generate a full custom delimited spreadsheet or database ready output\n" + "for detailed analysis.\n" + "Options available for further analysis: date formating,\n" + "headers, detailed message categories, tailer...\n";
+        final String HELP_DESC = "DESCRIPTION:\n" + "Parse ANY Essbase (v.5-v.11) server or application logs\n" + "and generate a full custom delimited spreadsheet or database ready output\n" + "for detailed analysis.\n" + "Options available for further analysis: date formating,\n" + "headers, detailed message categories\n";
 
-        final String HELP_REQU = "REQUIREMENTS:\n" + "JRE 1.6 or higher\n";
+        final String HELP_USAGESAMPLE = "USAGE SAMPLE:\n" + "";
 
-        final String HELP_VERS = "VERSION:\n" + "version 0.x.b\n";
+        final String HELP_REQU = "REQUIREMENTS:\n" + "JRE 1.6 or higher\nCurrent JRE version: " + JavaVersionDisplayApplet() + "\n";
 
-        final String HELP_AUTH = "AUTHOR:\n" + "Written by Sebastien Roux <sebastien.roux@partake.com>\n" + "PARTAKE CONSULTING FRANCE - http://www.partake.com/ - 2007\n";
+        final String HELP_VERS = "VERSION:\n" + "version 0.9\n";
+
+        final String HELP_AUTH = "AUTHOR:\n" + "Proudly coded & released for the Essbase community by Sebastien Roux <roux.sebastien@gmail.com>\n";
+
+        final String HELP_SITE = "SITE:\n" + "http://code.google.com/p/jrightlog/\n";
+
+        final String HELP_LICE = "LICENCE:\n" + "GNU General Public License version 3 (GPLv3)\n";
 
         final String HELP_NOTE = "NOTES:\n" + "Use at your own risk!\n" + "You will be solely responsible for any damage\n" + "to your computer system or loss of data\n" + "that may result from the download\n" + "or the use of the following application.\n";
 
         HelpFormatter formatter = new HelpFormatter();
 
         formatter.printHelp("<jRightLog -i <file[;file2;...]> [OPTIONS]",
-                HELP_DESC + "OPTIONS:\n", options, HELP_REQU + HELP_VERS + HELP_AUTH + HELP_NOTE);
+                HELP_DESC + "OPTIONS:\n", options, HELP_REQU + HELP_VERS + HELP_AUTH + HELP_SITE + HELP_LICE + HELP_NOTE);
         System.exit(0);
+    }
+
+    public static String JavaVersionDisplayApplet() {
+        String jVersion = System.getProperty("java.version");
+        /*
+        String jVersion = System.getProperty("java.specification.version");
+
+        BigDecimal version = new BigDecimal(System.getProperty("java.specification.version"));
+
+        if (version.compareTo(new BigDecimal("1.5")) < 0) {
+        System.out.println("Your Java version is too old. Please install Java 5 or newer.");
+        }
+         */
+        return jVersion;
     }
 }

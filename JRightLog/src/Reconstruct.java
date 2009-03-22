@@ -10,6 +10,7 @@ import org.apache.oro.text.perl.Perl5Util;
  */
 public class Reconstruct {
 
+    private static final String FILESEPARATOR = ";";
     /**
      * Input file delimiter constant
      */
@@ -21,15 +22,15 @@ public class Reconstruct {
     /**
      * Output file name
      */
-    private String outputFile = "";
+    private static String outputFile = "";
     /**
      * Categories
      */
     private static boolean categories = false;
     /**
-     * Tailer
+     *  Filter
      */
-    private boolean tailer = false;
+    private static String sfilter = "";
     /**
      * Date format
      */
@@ -41,21 +42,9 @@ public class Reconstruct {
     /**
      * Essbase log file(s)
      */
-    private File[] inputFile = null;
-    /**
-     * Tailer variable
-     */
-    private String mainLine = "";
+    private static File[] inputFile = null;
 
-    public String getMainLine() {
-        return mainLine;
-    }
-
-    public void setMainLine(String mainLine) {
-        this.mainLine = mainLine;
-    }
-
-    public void setOutputDelimiter(String output_delimiter) {
+    public static void setOutputDelimiter(String output_delimiter) {
         if (!output_delimiter.equals("")) {
             if (output_delimiter.equals("\\t")) { // handle tab string
                 Reconstruct.delimiter = "	";
@@ -65,58 +54,73 @@ public class Reconstruct {
         }
     }
 
-    public String getOutputDelimiter() {
+    public static String getOutputDelimiter() {
         return delimiter;
     }
 
-    public void setOutputFile(String outputFileName) {
-        this.outputFile = outputFileName;
+    public static void setOutputFile(String outputFileName) {
+        Reconstruct.outputFile = outputFileName;
     }
 
-    public String getOutputFile() {
+    public static String getOutputFile() {
         return outputFile;
     }
 
-    public boolean getCategories() {
+    public static boolean getCategories() {
         return categories;
     }
 
-    public void setCategories(boolean categories) {
+    public static void setCategories(boolean categories) {
         Reconstruct.categories = categories;
     }
 
-    public boolean getTailer() {
-        return tailer;
+    public static String getFilter() {
+        return sfilter;
     }
 
-    public void setTailer(boolean tailer) {
-        this.tailer = tailer;
+    public static void setFilter(String filter) {
+        Reconstruct.sfilter = filter;
     }
 
-    public String getDateFormat() {
+    public static String getDateFormat() {
         return dateFormat;
     }
 
-    public void setDateFormat(String dateFormat) {
+    public static void setDateFormat(String dateFormat) {
         if (dateFormat != null) {
             Reconstruct.dateFormat = dateFormat;
         }
     }
 
-    public boolean getHeader() {
+    public static boolean getHeader() {
         return header;
     }
 
-    public void setHeader(boolean header) {
+    public static void setHeader(boolean header) {
         Reconstruct.header = header;
     }
 
-    public File[] getInputFile() {
-        return inputFile;
+    // Convert inputFile array to delimited string
+    public static String getInputFile(String delimiter) {
+
+        if (delimiter.equals("")) {
+            delimiter = FILESEPARATOR;
+        }
+
+        StringBuffer result = new StringBuffer();
+
+        if (inputFile.length > 0) {
+            result.append(inputFile[0]);
+            for (int counter = 1; counter < inputFile.length; counter++) {
+                result.append(delimiter);
+                result.append(inputFile[counter]);
+            }
+        }
+        return result.toString();
     }
 
-    public void setInputFile(File[] inputFile) {
-        this.inputFile = inputFile;
+    public static void setInputFile(File[] inputFile) {
+        Reconstruct.inputFile = inputFile;
     }
 
     public static String getLOG_DELIMITER() {
@@ -135,6 +139,7 @@ public class Reconstruct {
 
         String line = null;
         String delim = getOutputDelimiter();
+        String filter = getFilter();
 
         int counter = 0;
 
@@ -152,7 +157,7 @@ public class Reconstruct {
                         setHeader(delim);
                     }
                     // rebuild log (main)
-                    rebuildLog(line, buffer, delim);
+                    rebuildLog(line, buffer, delim, filter);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -168,21 +173,21 @@ public class Reconstruct {
                     BufferedReader buffer = new BufferedReader(reader);
 
                     // File output
-                    File MonFichierOut = new File(getOutputFile());
+                    File myOutputFile = new File(getOutputFile());
                     FileWriter out;
 
-                    // if first file create output
+                    // if first file creates output
                     if (counter == 0) {
-                        out = new FileWriter(MonFichierOut);
+                        out = new FileWriter(myOutputFile);
                         // header
                         setHeader(out, delim);
                     } // else append to output
                     else {
-                        out = new FileWriter(MonFichierOut, true);
+                        out = new FileWriter(myOutputFile, true);
                     }
 
                     // rebuild log (main)
-                    rebuildLog(line, buffer, out, delim);
+                    rebuildLog(line, buffer, out, delim, filter);
 
                     buffer.close();
                     out.flush();
@@ -210,7 +215,7 @@ public class Reconstruct {
      *
      * @author Sebastien Roux
      */
-    private void rebuildLog(String line, BufferedReader buffer, FileWriter out, String delim) {
+    private void rebuildLog(String line, BufferedReader buffer, FileWriter out, String delim, String filter) {
 
         Perl5Util regEx = new Perl5Util();
 
@@ -338,12 +343,14 @@ public class Reconstruct {
                     line = regEx.substitute("s/ +/ /g", line);
                     // Deleting eol tab/space
                     line = regEx.substitute("s/[ \t]+$//g", line);
-                    // Replacing single quote bu y double
+                    // Replacing single quote by double qsuotes
                     line = regEx.substitute("s/'/\"/g", line);
                 }
 
                 // Write output
-                out.write(line + "\n");
+                if (!line.equals("") && regEx.match("/^.*" + filter + ".*$/", line)) {
+                    out.write(line + "\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -360,7 +367,7 @@ public class Reconstruct {
      *
      * @author Sebastien Roux
      */
-    private void rebuildLog(String line, BufferedReader buffer, String delim) {
+    private void rebuildLog(String line, BufferedReader buffer, String delim, String filter) {
 
         Perl5Util regEx = new Perl5Util();
 
@@ -490,143 +497,12 @@ public class Reconstruct {
                 }
 
                 // Write output
-                System.out.println(line);
+                if (!line.equals("") && regEx.match("/^.*" + filter + ".*$/", line)) {
+                    System.out.println(line);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Tail and parse from specified log file to console output
-     *
-     * @param line
-     *            current line being rode in log file
-     *
-     * @author Sebastien Roux
-     */
-    public void rebuildLog(String line, String delim) {
-
-        // Jakarta ORO regular expression library
-        Perl5Util regEx = new Perl5Util();
-        // Reconstruct reconstruct = new Reconstruct();
-
-        if (!line.equals("")) {
-            if (regEx.match("/^\\[(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/", line)) {
-                // Replace 1st opening bracket ([) by nothing
-                line = regEx.substitute("s/^\\[//", line);
-                // Replace 1st closing bracket (]) with delimiter
-                line = regEx.substitute("s/\\]/" + delim + "/", line);
-                // Replace 4 1st whitespaces with delimiter
-                for (int counter = 0; counter <= 3; counter++) {
-                    line = regEx.substitute("s/ /" + delim + "/",
-                            line);
-                }
-                // Replace slash delimiters (/) with delimiter
-                line = regEx.substitute("s/\\//" + delim + "/g", line);
-
-                // Date
-                if (!getDateFormat().equals("default")) {
-                    line = changeDateFormat(line, getOutputDelimiter());
-                }
-
-                // Categories
-                if (getCategories() == true) {
-                    line = setEssMsgCat(line, getOutputDelimiter());
-                }
-
-                if (getMainLine().equals("")) {
-                    setMainLine(line);
-                    line = "";
-                }
-            } // Essbase delimited log
-            else if (regEx.match("/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/", line)) {
-                List list = new ArrayList();
-
-                // Split with delimiter
-                regEx.split(list, "/[" + LOG_DELIMITER + "]/", line);
-
-                StringBuffer sb = new StringBuffer();
-                line = sb.append((String) list.get(0)).append(
-                        (String) delim).append((String) list.get(1)).append((String) delim).append(
-                        (String) list.get(2)).append(
-                        (String) delim).append(
-                        (String) list.get(3)).append((String) ":").append((String) list.get(4)).append((String) ":").append((String) list.get(5)).append(
-                        (String) delim).append(
-                        (String) list.get(6)).append(
-                        (String) delim).append(
-                        (String) list.get(7)).append(
-                        (String) delim).append(
-                        (String) list.get(8)).append(
-                        (String) delim).append(
-                        (String) list.get(9)).append(
-                        (String) delim).append(
-                        (String) list.get(10)).append(
-                        (String) delim).append(
-                        (String) list.get(11)).append((String) "").append((String) list.get(12)).append((String) "").append((String) list.get(13)).toString();
-
-                for (int counter = 14; counter <= list.size() - 1; counter++) {
-                    line = sb.append((String) " ").append(
-                            (String) list.get(counter)).toString();
-                }
-
-                // Date
-                if (!getDateFormat().equals("default")) {
-                    line = changeDateFormat(line, getOutputDelimiter());
-                }
-
-                // Categories
-                if (getCategories() == true) {
-                    line = setEssMsgCat(line, getOutputDelimiter());
-                }
-            } // Other cases
-            else {
-                if (!getMainLine().equals("")) {
-                    String line2 = line;
-                    line = mainLine + line2;
-                    mainLine = "";
-                } else {
-                    StringBuffer sb = new StringBuffer();
-                    if (getCategories() == true) {
-                        if (getDateFormat().equals("default")) {
-                            for (int counter = 1; counter <= 12; counter++) {
-                                sb.append((String) delim);
-                            }
-                        } else {
-                            for (int counter = 1; counter <= 9; counter++) {
-                                sb.append((String) delim);
-                            }
-                        }
-                    } else {
-                        if (getDateFormat().equals("default")) {
-                            for (int counter = 1; counter <= 11; counter++) {
-                                sb.append((String) delim);
-                            }
-                        } else {
-                            for (int counter = 1; counter <= 8; counter++) {
-                                sb.append((String) delim);
-                            }
-                        }
-                    }
-                    line = sb.append((String) line).toString();
-                }
-            }
-            // Common cases
-            {
-                // Replace 2 first brackets ((,)) with delimiter
-                for (int counter = 1; counter <= 2; counter++) {
-                    line = regEx.substitute("s/[()]/" + delim + "/",
-                            line);
-                }
-                // Replacing multi-space by single space
-                line = regEx.substitute("s/ +/ /g", line);
-                // Deleting eol tab/space
-                line = regEx.substitute("s/[ \t]+$//g", line);
-            }
-
-            if (!line.equals("")) {
-                System.out.println(line);
-            }
         }
     }
 
@@ -686,8 +562,8 @@ public class Reconstruct {
 
         // Set date format to ISO 8601 extended style (YYYY-MM-DD)
         if (getDateFormat().equals("iso")) {
-            line = sb.append((String) list.get(4)).append((String) "-").append(
-                    (String) list.get(1)).append((String) "-").append(
+            line = sb.append((String) list.get(4)).append((String) "/").append(
+                    (String) list.get(1)).append((String) "/").append(
                     (String) list.get(2)).append((String) delim).toString();
         } // Set date format to US style (MM/DD/YYYY)
         else if (dateFormat.equals("us")) {
@@ -696,8 +572,8 @@ public class Reconstruct {
                     (String) list.get(4)).append((String) delim).toString();
         } // Set date format to European style (DD/MM/YYYY)
         else if (dateFormat.equals("eur")) {
-            line = sb.append((String) list.get(2)).append((String) ".").append(
-                    (String) list.get(1)).append((String) ".").append(
+            line = sb.append((String) list.get(2)).append((String) "/").append(
+                    (String) list.get(1)).append((String) "/").append(
                     (String) list.get(4)).append((String) delim).toString();
         }
 
@@ -757,7 +633,7 @@ public class Reconstruct {
                 "Restoring ASCII data", "Internal (block numbering)",
                 "Internal (utilities)", "Calculator", "Requestor",
                 "Lock manager", "Alias table", "Report Writer", "Currency",
-                "Not currently used", "Database objects",
+                "Not currently used", "Database artifacts",
                 "Spreadsheet extractor", "SQL Interface", "Security",
                 "Partitioning", "Query Extractor", "API",
                 "General network", "Network-Named Pipes", "Network-TCP",
@@ -766,7 +642,7 @@ public class Reconstruct {
                 "Not currently used", "Transaction manager",
                 "Not currently used", "Rules file processing",
                 "Not currently used", "Not currently used",
-                "Web Analysis (Analyzer)", "Grid API", "Miscellaneous",
+                "Web Analysis", "Grid API", "Miscellaneous",
                 "LRO", "Outline synchronization", "Outline change records",
                 "Attributes", "Showcase",
                 "Enterprise Integration Services", "Calculator framework",
@@ -851,7 +727,3 @@ public class Reconstruct {
         }
     }
 }
-
-
-
-
