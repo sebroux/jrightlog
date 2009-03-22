@@ -20,7 +20,7 @@ public class JRightLog {
 	 */
 	public static void main(String[] args) {
 
-		VerifyArguments_CLI verifyArguments = new VerifyArguments_CLI();
+		CLI verifyArguments = new CLI();
 		verifyArguments.setArgs(args);
 		verifyArguments.parseArgs();
 	}
