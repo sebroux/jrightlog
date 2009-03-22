@@ -117,19 +117,19 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="jPanel4" max="32767" attributes="1"/>
                           <Component id="jPanel1" alignment="1" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="12" max="32767" attributes="0"/>
+                              <EmptySpace pref="21" max="32767" attributes="0"/>
                               <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButton5" min="-2" max="-2" attributes="0"/>
@@ -149,9 +149,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel6" min="0" max="32767" attributes="1"/>
-                  <Component id="jPanel1" alignment="0" pref="132" max="32767" attributes="1"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel1" max="32767" attributes="1"/>
+                  <Component id="jPanel6" alignment="0" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -202,14 +202,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="radDateDefault" alignment="0" pref="206" max="32767" attributes="1"/>
-                      <Component id="radDateISO" alignment="0" pref="206" max="32767" attributes="1"/>
-                      <Component id="radDateUS" alignment="0" pref="206" max="32767" attributes="1"/>
-                      <Component id="radDateEur" alignment="0" pref="206" max="32767" attributes="1"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="radDateEur" alignment="0" max="32767" attributes="1"/>
+                      <Component id="radDateUS" alignment="0" max="32767" attributes="1"/>
+                      <Component id="radDateISO" alignment="0" max="32767" attributes="1"/>
+                      <Component id="radDateDefault" alignment="0" pref="156" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -223,6 +223,7 @@
                   <Component id="radDateUS" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="radDateEur" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -288,21 +289,20 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtInputFilePath" alignment="0" pref="279" max="32767" attributes="1"/>
-                              <Component id="txtOutputFilePath" alignment="0" pref="279" max="32767" attributes="1"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="txtOutputFilePath" pref="262" max="32767" attributes="1"/>
+                              <Component id="txtInputFilePath" alignment="1" pref="262" max="32767" attributes="1"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="butonSelectOuputFile" min="-2" pref="55" max="-2" attributes="0"/>
-                              <Component id="butonSelectInputFile" alignment="0" min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="butonSelectOuputFile" min="-2" max="-2" attributes="1"/>
+                              <Component id="butonSelectInputFile" min="0" pref="0" max="32767" attributes="1"/>
                           </Group>
                       </Group>
-                      <Component id="jLabel1" alignment="0" min="-2" pref="135" max="-2" attributes="1"/>
                       <Component id="jLabel2" alignment="0" min="-2" pref="102" max="-2" attributes="1"/>
+                      <Component id="jLabel1" alignment="0" min="-2" pref="135" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -315,14 +315,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="txtInputFilePath" alignment="3" max="32767" attributes="0"/>
-                      <Component id="butonSelectInputFile" alignment="3" min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="butonSelectInputFile" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="butonSelectOuputFile" min="0" pref="0" max="32767" attributes="1"/>
-                      <Component id="txtOutputFilePath" alignment="1" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtOutputFilePath" alignment="3" min="-2" max="-2" attributes="1"/>
+                      <Component id="butonSelectOuputFile" alignment="3" min="0" pref="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -341,6 +341,9 @@
             <Property name="toolTipText" type="java.lang.String" value="Select Essbase server or application logs" noResource="true"/>
             <Property name="name" type="java.lang.String" value="txtInputFilePath" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtInputFilePathActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="butonSelectInputFile">
           <Properties>
@@ -389,11 +392,11 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtFilter" alignment="0" min="-2" pref="133" max="-2" attributes="1"/>
-                      <Component id="jLabel3" alignment="0" pref="192" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="jLabel3" alignment="0" max="32767" attributes="1"/>
+                      <Component id="txtFilter" alignment="0" pref="133" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -437,7 +440,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="chkZip" alignment="0" pref="130" max="32767" attributes="0"/>
+              <Component id="chkZip" alignment="0" pref="139" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -484,7 +487,7 @@
                       <Component id="chkHeader" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="txtDelimiter" alignment="0" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="62" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

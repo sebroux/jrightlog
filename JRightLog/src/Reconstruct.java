@@ -18,7 +18,7 @@ public class Reconstruct {
     /**
      * Output file delimiter
      */
-    private static String delimiter = "|";
+    private static String delimiter = "tab";
     /**
      * Output file name
      */
@@ -46,8 +46,10 @@ public class Reconstruct {
 
     public static void setOutputDelimiter(String output_delimiter) {
         if (!output_delimiter.equals("")) {
-            if (output_delimiter.equals("\\t")) { // handle tab string
-                Reconstruct.delimiter = "	";
+            if (output_delimiter.equals("\t")
+                    || output_delimiter.equals("\\t")
+                    || output_delimiter.equals("tab")) { // handle tab string
+                Reconstruct.delimiter = "\t";
             } else {
                 Reconstruct.delimiter = output_delimiter;
             }
