@@ -60,7 +60,7 @@ public class CLI {
         @SuppressWarnings("static-access")
         Option separator = OptionBuilder.withArgName("separator").withLongOpt(
                 "separator").hasOptionalArg().withDescription(
-                "use specified separator for output").create("s");
+                "use specified separator for output (use \t or tab for tabulation)").create("s");
         options.addOption(separator);
 
         // add filter option - require an argument
