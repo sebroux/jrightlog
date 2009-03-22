@@ -40,7 +40,7 @@ public class About extends javax.swing.JDialog {
         jTextArea1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("\t             JSSAM - JSSAudit Merger\n\nDESCRIPTION: Merge Essbase SSAudit files (.ATX, .ATG) to a single file.\n\nREQUIREMENTS: SUN JRE 1.6 or higher\n\nVERSION: version 0.9\n\nAUTHOR: Proudly coded & released for the Essbase community by Sebastien Roux <roux.sebastien@gmail.com>\n\nSITE: http://code.google.com/p/jssauditmerger/\n\nLICENSE: GNU General Public License version 3 (GPLv3)\n\nNOTES: Use at your own risk! You will be solely responsible for any damage to your computer system or loss of data that may result from the download or the use of the following application."); // NOI18N
+        jTextArea1.setText("\t             JRightLog\n\nDESCRIPTION: Parse ANY Essbase (v.5-v.11) server or application logs and generate a full custom delimited spreadsheet or database ready output for detailed analysis.\nOptions available for further analysis: date formating, headers, detailed message categories, filtering, custom delimiter.\n\nREQUIREMENTS: SUN JRE 1.6 or higher\n\nVERSION: version 1.0\n\nAUTHOR: Proudly coded & released for the Essbase community by Sebastien Roux <roux.sebastien@gmail.com>\n\nSITE: http://code.google.com/p/jrightlog/\n\nLICENSE: GNU General Public License version 3 (GPLv3)\n\nNOTES: Use at your own risk! You will be solely responsible for any damage to your computer system or loss of data that may result from the download or the use of the following application."); // NOI18N
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setFocusable(false);
         jTextArea1.setName("jTextArea1"); // NOI18N
@@ -55,7 +55,7 @@ public class About extends javax.swing.JDialog {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
