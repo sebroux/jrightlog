@@ -177,7 +177,7 @@ public class CLI {
 
         final String HELP_REQU = "REQUIREMENTS:\n" + "JRE 1.6 or higher\nCurrent JRE version: " + JavaVersionDisplayApplet() + "\n";
 
-        final String HELP_VERS = "VERSION:\n" + "version 0.9\n";
+        final String HELP_VERS = "VERSION:\n" + "version 1.0\n";
 
         final String HELP_AUTH = "AUTHOR:\n" + "Proudly coded & released for the Essbase community by Sebastien Roux <roux.sebastien@gmail.com>\n";
 

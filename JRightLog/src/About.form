@@ -64,7 +64,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jScrollPane1" alignment="0" pref="254" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" alignment="1" pref="254" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -87,7 +87,7 @@
                 </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="text" type="java.lang.String" value="&#x9;             JSSAM - JSSAudit Merger&#xa;&#xa;DESCRIPTION: Merge Essbase SSAudit files (.ATX, .ATG) to a single file.&#xa;&#xa;REQUIREMENTS: SUN JRE 1.6 or higher&#xa;&#xa;VERSION: version 0.9&#xa;&#xa;AUTHOR: Proudly coded &amp; released for the Essbase community by Sebastien Roux &lt;roux.sebastien@gmail.com&gt;&#xa;&#xa;SITE: http://code.google.com/p/jssauditmerger/&#xa;&#xa;LICENSE: GNU General Public License version 3 (GPLv3)&#xa;&#xa;NOTES: Use at your own risk! You will be solely responsible for any damage to your computer system or loss of data that may result from the download or the use of the following application." noResource="true"/>
+                <Property name="text" type="java.lang.String" value="&#x9;             JRightLog&#xa;&#xa;DESCRIPTION: Parse ANY Essbase (v.5-v.11) server or application logs and generate a full custom delimited spreadsheet or database ready output for detailed analysis.&#xa;Options available for further analysis: date formating, headers, detailed message categories, filtering, custom delimiter.&#xa;&#xa;REQUIREMENTS: SUN JRE 1.6 or higher&#xa;&#xa;VERSION: version 1.0&#xa;&#xa;AUTHOR: Proudly coded &amp; released for the Essbase community by Sebastien Roux &lt;roux.sebastien@gmail.com&gt;&#xa;&#xa;SITE: http://code.google.com/p/jrightlog/&#xa;&#xa;LICENSE: GNU General Public License version 3 (GPLv3)&#xa;&#xa;NOTES: Use at your own risk! You will be solely responsible for any damage to your computer system or loss of data that may result from the download or the use of the following application." noResource="true"/>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="jTextArea1" noResource="true"/>
