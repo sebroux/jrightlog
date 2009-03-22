@@ -4,24 +4,29 @@
  * and readable output as spreadsheet or database ready output for detailed
  * analysis. In order to enhance analysis, options are available on date
  * formating, or better filtering.
- * 
+ *
  * @author Sebastien Roux
  */
 
+
+
 public class JRightLog {
 
-	/**
-	 * Main class
-	 * <p>
-	 * 
-	 * Conmmand line launcher. Redirection to command line parser.
-	 * 
-	 * @author Sebastien Roux
-	 */
-	public static void main(String[] args) {
+    /**
+     * Main class
+     * <p>
+     *
+     * Conmmand line launcher. Redirection to command line parser.
+     *
+     * @author Sebastien Roux
+     */
+    public static void main(String[] args) {
+        CLI verifyArguments = new CLI();
 
-		CLI verifyArguments = new CLI();
-		verifyArguments.setArgs(args);
-		verifyArguments.parseArgs();
-	}
+        verifyArguments.setArgs(args);
+        verifyArguments.parseArgs();
+    }
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

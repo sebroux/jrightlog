@@ -150,8 +150,8 @@
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel6" min="0" pref="125" max="32767" attributes="1"/>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jPanel6" min="0" max="32767" attributes="1"/>
+                  <Component id="jPanel1" alignment="0" pref="132" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -499,7 +499,7 @@
                   <Component id="jLabel4" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="txtDelimiter" min="-2" pref="20" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -533,7 +533,10 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtDelimiter">
           <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Specify an output delimiter"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Reconstruct.getOutputDelimiter()" type="code"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Specify an output delimiter (type &quot;\t&quot; or &quot;tab&quot; for tabulation delimiter)"/>
             <Property name="name" type="java.lang.String" value="txtSeparator" noResource="true"/>
           </Properties>
         </Component>
