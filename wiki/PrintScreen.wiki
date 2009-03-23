@@ -1,0 +1,7 @@
+Print screen set for JRightLog utility
+
+*Command line interface*
+
+
+
+*Graphic user interface*
