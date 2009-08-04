@@ -10,7 +10,13 @@ import org.apache.oro.text.perl.Perl5Util;
  */
 public class Reconstruct {
 
+    /**
+     * Output file target (DB / file)
+     */
+    private static boolean DBOutput = true;
+
     private static final String FILESEPARATOR = ";";
+
     /**
      * Input file delimiter constant
      */
@@ -18,7 +24,7 @@ public class Reconstruct {
     /**
      * Output file delimiter
      */
-    private static String delimiter = "tab";
+    private static String delimiter = "\t";
     /**
      * Output file name
      */
@@ -46,10 +52,8 @@ public class Reconstruct {
 
     public static void setOutputDelimiter(String output_delimiter) {
         if (!output_delimiter.equals("")) {
-            if (output_delimiter.equals("\t")
-                    || output_delimiter.equals("\\t")
-                    || output_delimiter.equals("tab")) { // handle tab string
-                Reconstruct.delimiter = "\t";
+            if (output_delimiter.equals("\t") || output_delimiter.equals("\\t") || output_delimiter.equals("tab")) { // handle tab string
+                Reconstruct.delimiter = "	";
             } else {
                 Reconstruct.delimiter = output_delimiter;
             }
@@ -145,7 +149,7 @@ public class Reconstruct {
 
         int counter = 0;
 
-        // if no output file defined
+        // if no output file defined (in shell)
         if (getOutputFile().equals("")) {
 
             // for (File file : inputFile) {
@@ -165,7 +169,29 @@ public class Reconstruct {
                 }
                 counter++;
             }
-        } // if output file defined
+        } // if DB output specified (in GUI)
+        else if (DBOutput == true) {
+
+            for (int fileCounter = 0; fileCounter < inputFile.length; fileCounter++) {
+                try {
+                    // File input
+                    FileReader reader = new FileReader(inputFile[fileCounter]);
+                    BufferedReader buffer = new BufferedReader(reader);
+                    List list2 = new ArrayList();
+
+                    // rebuild log (main)
+                    rebuildLog(line, buffer, filter, list2);
+                    buffer.close();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                counter++;
+            }
+
+        } // if output file defined (in shell and GUI)
         else {
 
             for (int fileCounter = 0; fileCounter < inputFile.length; fileCounter++) {
@@ -183,8 +209,7 @@ public class Reconstruct {
                         out = new FileWriter(myOutputFile);
                         // header
                         setHeader(out, delim);
-                    } // else append to output
-                    else {
+                    } else {
                         out = new FileWriter(myOutputFile, true);
                     }
 
@@ -206,6 +231,163 @@ public class Reconstruct {
     }
 
     /**
+     * Parse from specified log file to array
+     *
+     * @param line
+     *            current line being rode in log file
+     * @param buffer
+     *            input file buffer
+     * @param filter
+     *            output filter
+     * 
+     * @author Sebastien Roux
+     */
+    private void rebuildLog(String line, BufferedReader buffer, String filter, List list2) {
+
+        Perl5Util regEx = new Perl5Util();
+
+        // Read input file
+        try {
+
+            while ((line = buffer.readLine()) != null) {
+
+                // Skip empty rows
+                if (line.equals("")) {
+                    continue;
+                } else if (regEx.match("/^[\\[(](Mon|Tue|Wed|Thu|Fri|Sat|Sun)/",
+                        line)) {
+                    // Replace 1st opening bracket ([) by nothing
+                    line = regEx.substitute("s/^[\\[(]//", line);
+                    // Replace 1st closing bracket (]) with delimiter
+                    line = regEx.substitute("s/[\\])]/|/",
+                            line);
+
+                    // Replace 4 1st whitespaces with delimiter
+                    for (int counter = 0; counter <= 3; counter++) {
+                        line = regEx.substitute("s/ /|/",
+                                line);
+                    }
+                    // Replace slash delimiters (/) with delimiter
+                    line = regEx.substitute("s/\\//|/g",
+                            line);
+
+                    // Date
+                    if (!dateFormat.equals("default")) {
+                        line = changeDateFormat(line, "|");
+                    }
+
+                    // Categories
+                    if (categories == true) {
+                        line = setEssMsgCat(line, "|");
+                    }
+
+                    // Join with next line if not empty
+                    String nextLine;
+                    while ((nextLine = buffer.readLine()) != null) {
+                        line = line + nextLine;
+                        break;
+                    }
+                } else if (regEx.match("/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/", line)) {
+
+                    List list = new ArrayList();
+
+                    // Split with delimiter
+                    regEx.split(list, "/[" + LOG_DELIMITER + "]/", line);
+
+                    StringBuffer sb = new StringBuffer();
+                    line = sb.append((String) list.get(0)).append(
+                            (String) delimiter).append(
+                            (String) list.get(1)).append(
+                            (String) delimiter).append(
+                            (String) list.get(2)).append(
+                            (String) delimiter).append(
+                            (String) list.get(3)).append((String) ":").append(
+                            (String) list.get(4)).append((String) ":").append(
+                            (String) list.get(5)).append(
+                            (String) delimiter).append(
+                            (String) list.get(6)).append(
+                            (String) delimiter).append(
+                            (String) list.get(7)).append(
+                            (String) delimiter).append(
+                            (String) list.get(8)).append(
+                            (String) delimiter).append(
+                            (String) list.get(9)).append(
+                            (String) delimiter).append(
+                            (String) list.get(10)).append(
+                            (String) delimiter).append(
+                            (String) list.get(11)).append((String) "").append(
+                            (String) list.get(12)).append((String) "").append(
+                            (String) list.get(13)).toString();
+
+                    for (int counter = 14; counter <= list.size() - 1; counter++) {
+                        line = sb.append((String) " ").append(
+                                (String) list.get(counter)).toString();
+                    }
+
+                    // Date
+                    if (!getDateFormat().equals("default")) {
+                        line = changeDateFormat(line, "|");
+                    }
+
+                    // Categories
+                    if (getCategories() == true) {
+                        line = setEssMsgCat(line, "|");
+                    }
+                } else {
+                    StringBuffer sb = new StringBuffer();
+
+                    if (getCategories() == true) {
+                        if (getDateFormat().equals("default")) {
+                            for (int counter = 1; counter <= 12; counter++) {
+                                sb.append((String) delimiter);
+                            }
+                        } else {
+                            for (int counter = 1; counter <= 9; counter++) {
+                                sb.append((String) delimiter);
+                            }
+                        }
+                    } else {
+                        if (getDateFormat().equals("default")) {
+                            for (int counter = 1; counter <= 11; counter++) {
+                                sb.append((String) delimiter);
+                            }
+                        } else {
+                            for (int counter = 1; counter <= 8; counter++) {
+                                sb.append((String) delimiter);
+                            }
+                        }
+                    }
+                    line = sb.append((String) line).toString();
+                }
+
+                // Common cases
+                {
+                    // Replace 2 first brackets ((,)) with delimiter
+                    for (int counter = 1; counter <= 2; counter++) {
+                        line = regEx.substitute("s/[()]/" + delimiter + "/", line);
+                    }
+                    // Replacing multi-space by single space
+                    line = regEx.substitute("s/ +/ /g", line);
+                    // Deleting eol tab/space
+                    line = regEx.substitute("s/[ \t]+$//g", line);
+                    // Replacing single quote by double qsuotes
+                    line = regEx.substitute("s/'/\"/g", line);
+                }
+
+                // Write output
+                if (!line.equals("") && regEx.match("/^.*" + filter + ".*$/", line)) {
+                    regEx.split(list2, "/[|]/", line);
+                    //DB db as new DB();
+
+                    //System.out.println(list2.get(1));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Parse from specified log file to file output
      *
      * @param line
@@ -214,6 +396,10 @@ public class Reconstruct {
      *            input file buffer
      * @param out
      *            output file
+     * @param delim
+     *            output delimiter
+     * @param filter
+     *            output filter
      *
      * @author Sebastien Roux
      */
@@ -229,12 +415,12 @@ public class Reconstruct {
                 // Skip empty rows
                 if (line.equals("")) {
                     continue;
-                } else if (regEx.match("/^\\[(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/",
+                } else if (regEx.match("/^[\\[(](Mon|Tue|Wed|Thu|Fri|Sat|Sun)/",
                         line)) {
                     // Replace 1st opening bracket ([) by nothing
-                    line = regEx.substitute("s/^\\[//", line);
+                    line = regEx.substitute("s/^[\\[(]//", line);
                     // Replace 1st closing bracket (]) with delimiter
-                    line = regEx.substitute("s/\\]/" + delim + "/",
+                    line = regEx.substitute("s/[\\])]/" + delim + "/",
                             line);
 
                     // Replace 4 1st whitespaces with delimiter
@@ -366,6 +552,10 @@ public class Reconstruct {
      *            current line being rode in log file
      * @param buffer
      *            input file buffer
+     * @param delim
+     *            output delimiter
+     * @param filter
+     *            output filter
      *
      * @author Sebastien Roux
      */
@@ -381,12 +571,12 @@ public class Reconstruct {
                 // Skip empty rows
                 if (line.equals("")) {
                     continue;
-                } else if (regEx.match("/^\\[(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/",
+                } else if (regEx.match("/^[\\[(](Mon|Tue|Wed|Thu|Fri|Sat|Sun)/",
                         line)) {
                     // Replace 1st opening bracket ([) by nothing
-                    line = regEx.substitute("s/^\\[//", line);
+                    line = regEx.substitute("s/^[\\[(]//", line);
                     // Replace 1st closing bracket (]) with delimiter
-                    line = regEx.substitute("s/\\]/" + delimiter + "/",
+                    line = regEx.substitute("s/[\\])]/" + delimiter + "/",
                             line);
                     // Replace 4 1st whitespaces with delimiter
                     for (int counter = 0; counter <= 3; counter++) {
@@ -524,10 +714,10 @@ public class Reconstruct {
 
             String matchResult = regEx.getMatch().toString();
 
-            String MonthListMMM[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            String[] MonthListMMM = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-            String MonthListMM[] = {"01", "02", "03", "04", "05", "06", "07",
+            String[] MonthListMM = {"01", "02", "03", "04", "05", "06", "07",
                 "08", "09", "10", "11", "12"};
 
             for (int counter = 0; counter < MonthListMMM.length; counter++) {
@@ -607,7 +797,7 @@ public class Reconstruct {
 
             int matchResult = Integer.parseInt(regEx.getMatch().toString());
 
-            int rangeMin[] = {1001000, 1002000, 1003000, 1004000, 1005000,
+            int[] rangeMin = {1001000, 1002000, 1003000, 1004000, 1005000,
                 1006000, 1007000, 1008000, 1009000, 1010000, 1011000,
                 1012000, 1013000, 1014000, 1015000, 1016000, 1017000,
                 1018000, 1019000, 1020000, 1021000, 1022000, 1023000,
@@ -617,7 +807,7 @@ public class Reconstruct {
                 1120000, 1130000, 1140000, 1150000, 1160000, 1170000,
                 1180000, 1190000, 1200000, 1201000};
 
-            int rangeMax[] = {1001999, 1002999, 1003999, 1004999, 1005999,
+            int[] rangeMax = {1001999, 1002999, 1003999, 1004999, 1005999,
                 1006999, 1007999, 1008999, 1009999, 1010999, 1011999,
                 1012999, 1013999, 1014999, 1015999, 1016999, 1017999,
                 1018999, 1019999, 1020999, 1021999, 1022999, 1023999,
@@ -627,7 +817,7 @@ public class Reconstruct {
                 1129999, 1139999, 1149999, 1159999, 1169999, 1179999,
                 1189999, 1199999, 1200999, 9999999};
 
-            String errorComponent[] = {"Report Writer", "General server",
+            String[] errorComponent = {"Report Writer", "General server",
                 "Data load", "General server",
                 "Backup, export, or validate", "Data cache",
                 "Outline restructure",

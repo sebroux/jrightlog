@@ -27,6 +27,3 @@ public class JRightLog {
         verifyArguments.parseArgs();
     }
 }
-
-
-//~ Formatted by Jindent --- http://www.jindent.com

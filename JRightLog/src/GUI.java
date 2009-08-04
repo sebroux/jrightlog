@@ -1,7 +1,10 @@
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -35,6 +38,15 @@ public class GUI extends javax.swing.JFrame {
         //Set the frame icon to an image loaded from a file.
         setIconImage(Toolkit.getDefaultToolkit().getImage(
                 GUI.class.getResource("img/misc.png")));
+
+ /*       Frame fa = new Frame("Frame Hiding");
+        fa.addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e) {
+                Frame frame = (Frame) e.getSource();
+                frame.setVisible(false);
+            }
+        });*/
 
         initComponents();
     }
@@ -678,7 +690,7 @@ public class GUI extends javax.swing.JFrame {
 
         chkHeader.setSelected(reconstruct.getHeader());
         chkCategories.setSelected(reconstruct.getCategories());
-    //chkZip.setSelected(reconstruct.getZipOption());
+        //chkZip.setSelected(reconstruct.getZipOption());
     }//GEN-LAST:event_menuOptionsLoadConfig
 
     @SuppressWarnings("static-access")
@@ -730,7 +742,6 @@ public class GUI extends javax.swing.JFrame {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton butonSelectInputFile;
     private javax.swing.JButton butonSelectOuputFile;
