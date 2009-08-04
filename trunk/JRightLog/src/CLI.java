@@ -142,7 +142,7 @@ public class CLI {
                 reconstruct.setHeader(true);
             }
 
-            // separator/delimiter
+            // delimiter
             if (cmd.hasOption("s")) {
                 String separatorArg = cmd.getOptionValue("s");
                 reconstruct.setOutputDelimiter(separatorArg);
